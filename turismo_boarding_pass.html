@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turismo Internacional · Mayo 2026 · AR-TUR 0526</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --surface-0: #f0efec;
+      --surface-1: #f6f5f2;
+      --surface-2: #ffffff;
+      --text-primary: #0b0b0b;
+      --text-secondary: #52514e;
+      --text-muted: #898781;
+      --border: rgba(11,11,11,0.10);
+      --border-strong: rgba(11,11,11,0.18);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface-0: #111110;
+        --surface-1: #1a1a19;
+        --surface-2: #242423;
+        --text-primary: #ffffff;
+        --text-secondary: #c3c2b7;
+        --text-muted: #898781;
+        --border: rgba(255,255,255,0.10);
+        --border-strong: rgba(255,255,255,0.18);
+      }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--surface-0);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 660px;
+    }
+
+    /* ── TICKET PRINCIPAL ── */
+    .ticket {
+      background: var(--surface-2);
+      border: 0.5px solid var(--border-strong);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .ticket-header {
+      background: #0c2340;
+      padding: 16px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .airline-name {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #a8c6e8;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .flight-code {
+      font-size: 26px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .header-meta {
+      font-size: 12px;
+      color: #a8c6e8;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .ticket-body { padding: 20px 22px 16px; }
+
+    .route-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .airport { text-align: center; }
+    .iata {
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .city {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .route-line {
+      flex: 1;
+      margin: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .route-dots {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #0c2340;
+      flex-shrink: 0;
+    }
+    .line { flex: 1; height: 1px; background: var(--border-strong); }
+    .plane-icon { font-size: 20px; color: #0c2340; margin: 0 6px; }
+    .pax-count { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1.5px dashed var(--border-strong);
+      padding-top: 16px;
+    }
+    .field { padding: 0 4px; }
+    .field + .field { border-left: 0.5px solid var(--border); padding-left: 16px; }
+    .field-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 5px;
+    }
+    .field-value {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .field-delta { font-size: 12px; font-weight: 500; margin-top: 5px; }
+    .delta-up   { color: #1baf7a; }
+    .delta-down { color: #e34948; }
+
+    .ticket-tear {
+      position: relative;
+      margin: 16px 0 0;
+      border-top: 1.5px dashed var(--border-strong);
+    }
+    .ticket-tear::before,
+    .ticket-tear::after {
+      content: '';
+      position: absolute;
+      top: -9px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--surface-0);
+      border: 0.5px solid var(--border-strong);
+    }
+    .ticket-tear::before { left: -24px; }
+    .ticket-tear::after  { right: -24px; }
+
+    .ticket-stub {
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .stub-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .stub-val { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+    .barcode {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 36px;
+      margin-left: auto;
+    }
+    .barcode span { background: var(--text-primary); display: block; width: 2px; }
+
+    /* ── SECCIONES ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 1.5rem 0 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── VÍAS ── */
+    .via-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .via-card {
+      background: var(--surface-1);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .via-icon { font-size: 22px; color: #0c2340; margin-bottom: 8px; }
+    .via-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 4px;
+    }
+    .via-pax { font-size: 20px; font-weight: 500; color: var(--text-primary); line-height: 1; }
+    .via-delta { font-size: 12px; font-weight: 500; margin-top: 5px; }
+
+    /* ── DESTINOS ── */
+    .dest-ticket {
+      background: var(--surface-2);
+      border: 0.5px solid var(--border-strong);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .dest-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .dest-row:last-child { border-bottom: none; }
+    .dest-rank { font-size: 11px; color: var(--text-muted); font-weight: 500; min-width: 18px; }
+    .dest-flag { font-size: 14px; font-weight: 500; color: var(--text-primary); min-width: 110px; }
+    .dest-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: var(--surface-0);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .dest-bar { height: 100%; border-radius: 4px; }
+    .dest-pax { font-size: 12px; color: var(--text-secondary); font-weight: 500; min-width: 62px; text-align: right; }
+
+    .source-line {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 1.25rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="ticket">
+      <div class="ticket-header">
+        <div>
+          <div class="airline-name">Indec · Turismo Internacional</div>
+          <div class="flight-code">AR-TUR 0526</div>
+        </div>
+        <div class="header-meta">Mayo 2026<br>Resumen ejecutivo</div>
+      </div>
+
+      <div class="ticket-body">
+        <div class="route-row">
+          <div class="airport">
+            <div class="iata">EZE</div>
+            <div class="city">Buenos Aires</div>
+          </div>
+          <div class="route-line">
+            <div class="route-dots">
+              <div class="dot"></div>
+              <div class="line"></div>
+              <i class="ti ti-plane plane-icon" aria-hidden="true"></i>
+              <div class="line"></div>
+              <div class="dot"></div>
+            </div>
+            <div class="pax-count">1.041,8 mil pasajeros</div>
+          </div>
+          <div class="airport">
+            <div class="iata">MUN</div>
+            <div class="city">El mundo</div>
+          </div>
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <div class="field-label">Receptivos</div>
+            <div class="field-value">379,9 mil</div>
+            <div class="field-delta delta-up">▲ 20,4%</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Emisivos</div>
+            <div class="field-value">661,9 mil</div>
+            <div class="field-delta delta-down">▼ 12,1%</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Balance</div>
+            <div class="field-value">−281,9 mil</div>
+            <div class="field-delta delta-down">Déficit neto</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket-tear"></div>
+
+      <div class="ticket-stub">
+        <div>
+          <div class="stub-label">Clase</div>
+          <div class="stub-val">Estadística</div>
+        </div>
+        <div>
+          <div class="stub-label">Gate</div>
+          <div class="stub-val">Migraciones</div>
+        </div>
+        <div>
+          <div class="stub-label">Fuente</div>
+          <div class="stub-val">Indec · SIET</div>
+        </div>
+        <div class="barcode" aria-hidden="true">
+          <span style="height:28px"></span><span style="height:36px"></span>
+          <span style="height:20px"></span><span style="height:36px"></span>
+          <span style="height:14px"></span><span style="height:30px"></span>
+          <span style="height:36px"></span><span style="height:24px"></span>
+          <span style="height:36px"></span><span style="height:16px"></span>
+          <span style="height:36px"></span><span style="height:22px"></span>
+          <span style="height:32px"></span><span style="height:36px"></span>
+          <span style="height:18px"></span><span style="height:28px"></span>
+          <span style="height:36px"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">
+      <i class="ti ti-route" aria-hidden="true" style="font-size:14px"></i>
+      Vías de acceso · Receptivos
+    </div>
+
+    <div class="via-row">
+      <div class="via-card">
+        <div class="via-icon"><i class="ti ti-plane" aria-hidden="true"></i></div>
+        <div class="via-name">Aérea</div>
+        <div class="via-pax">205,1 mil</div>
+        <div class="via-delta delta-up">▲ 25,4%</div>
+      </div>
+      <div class="via-card">
+        <div class="via-icon"><i class="ti ti-bus" aria-hidden="true"></i></div>
+        <div class="via-name">Terrestre</div>
+        <div class="via-pax">129,2 mil</div>
+        <div class="via-delta delta-down">▼ 10,7%</div>
+      </div>
+      <div class="via-card">
+        <div class="via-icon"><i class="ti ti-ship" aria-hidden="true"></i></div>
+        <div class="via-name">Fluvial / marítimo</div>
+        <div class="via-pax">45,6 mil</div>
+        <div class="via-delta delta-up">▲ 29,9%</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top: 1.5rem;">
+      <i class="ti ti-world" aria-hidden="true" style="font-size:14px"></i>
+      Principales orígenes · Receptivo
+    </div>
+
+    <div class="dest-ticket">
+      <div class="dest-row">
+        <div class="dest-rank">01</div>
+        <div class="dest-flag">Brasil</div>
+        <div class="dest-bar-wrap"><div class="dest-bar" style="width:100%;background:#185FA5;"></div></div>
+        <div class="dest-pax">~130 mil</div>
+      </div>
+      <div class="dest-row">
+        <div class="dest-rank">02</div>
+        <div class="dest-flag">Europa</div>
+        <div class="dest-bar-wrap"><div class="dest-bar" style="width:62%;background:#2a78d6;"></div></div>
+        <div class="dest-pax">~80 mil</div>
+      </div>
+      <div class="dest-row">
+        <div class="dest-rank">03</div>
+        <div class="dest-flag">Uruguay</div>
+        <div class="dest-bar-wrap"><div class="dest-bar" style="width:46%;background:#378ADD;"></div></div>
+        <div class="dest-pax">~60 mil</div>
+      </div>
+      <div class="dest-row">
+        <div class="dest-rank">04</div>
+        <div class="dest-flag">Chile</div>
+        <div class="dest-bar-wrap"><div class="dest-bar" style="width:35%;background:#85B7EB;"></div></div>
+        <div class="dest-pax">~45 mil</div>
+      </div>
+      <div class="dest-row">
+        <div class="dest-rank">05</div>
+        <div class="dest-flag">EE.UU. / Canadá</div>
+        <div class="dest-bar-wrap"><div class="dest-bar" style="width:27%;background:#B5D4F4;"></div></div>
+        <div class="dest-pax">~35 mil</div>
+      </div>
+    </div>
+
+    <div class="source-line">
+      Fuente: Indec · Dirección de Estadísticas Sectoriales · SIET — Mayo 2026
+    </div>
+
+  </div>
+</body>
+</html>
